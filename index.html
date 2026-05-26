@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TimesX: Rethinking Multimodal Time-Series Forecasting Evaluation</title>
+    <meta
+      name="description"
+      content="TimesX is a real-world, leakage-aware, context-enriched benchmark for multimodal time-series forecasting evaluation."
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="brand" href="#">TimesX</a>
+        <div class="nav-links">
+          <a href="#overview">Overview</a>
+          <a href="#benchmark">Benchmark</a>
+          <a href="#pipeline">Pipeline</a>
+          <a href="#results">Results</a>
+          <a href="#citation">Citation</a>
+        </div>
+      </nav>
+
+      <section class="hero">
+        <p class="venue">ICML 2026</p>
+        <h1>Rethinking Multimodal Time-Series Forecasting Evaluation</h1>
+        <p class="subtitle">
+          TimesX is a real-world, leakage-aware, and refreshable benchmark for evaluating
+          multimodal time-series forecasting methods with rich textual context.
+        </p>
+
+        <div class="authors" aria-label="Authors and affiliations">
+          <p>
+            <strong>Haoxin Liu</strong><sup>1,2</sup>
+            <strong>Yichen Zhou</strong><sup>2</sup>
+            <strong>Rajat Sen</strong><sup>2</sup>
+            <strong>B. Aditya Prakash</strong><sup>1</sup>
+            <strong>Abhimanyu Das</strong><sup>2</sup>
+          </p>
+          <p><sup>1</sup>Georgia Institute of Technology &nbsp; <sup>2</sup>Google Research</p>
+        </div>
+
+        <div class="actions" aria-label="Project resources">
+          <a class="button primary" href="assets/TimesX_ICML2026.pdf">Paper</a>
+          <a class="button" href="https://github.com/haoxin1998/TimesX-project">Project Repo</a>
+          <span class="button muted" aria-disabled="true">Code coming soon</span>
+          <span class="button muted" aria-disabled="true">Dataset coming soon</span>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section id="overview" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Overview</p>
+          <h2>A benchmark built for realistic multimodal forecasting</h2>
+        </div>
+        <p class="lead">
+          TimesX studies how pretrained time-series foundation models and language models
+          behave when forecasts require both historical numeric signals and natural-language
+          context such as metadata, calendar effects, covariates, and time-stamped events.
+        </p>
+
+        <div class="metric-grid">
+          <article class="metric">
+            <strong>190</strong>
+            <span>core variables</span>
+          </article>
+          <article class="metric">
+            <strong>19</strong>
+            <span>domains</span>
+          </article>
+          <article class="metric">
+            <strong>4</strong>
+            <span>context types</span>
+          </article>
+          <article class="metric">
+            <strong>13</strong>
+            <span>evaluated methods</span>
+          </article>
+          <article class="metric">
+            <strong>312k+</strong>
+            <span>LLM inferences</span>
+          </article>
+          <article class="metric">
+            <strong>2018-2025</strong>
+            <span>refreshable time span</span>
+          </article>
+        </div>
+      </section>
+
+      <section id="benchmark" class="section band">
+        <div class="section-heading">
+          <p class="eyebrow">Benchmark Design</p>
+          <h2>Real data, strict time isolation, and detailed context</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature">
+            <h3>Real-world observations</h3>
+            <p>
+              TimesX is constructed from real time series and real textual information rather
+              than synthetic time series or synthetic contexts.
+            </p>
+          </article>
+          <article class="feature">
+            <h3>Leakage-aware evaluation</h3>
+            <p>
+              Evaluation examples are selected with strict temporal isolation and can be
+              refreshed as model knowledge cutoffs move forward.
+            </p>
+          </article>
+          <article class="feature">
+            <h3>Context-rich forecasting</h3>
+            <p>
+              Each variable is paired with metadata, calendar information, covariate summaries,
+              and time-stamped event narratives.
+            </p>
+          </article>
+          <article class="feature">
+            <h3>Cross-domain scale</h3>
+            <p>
+              The benchmark covers daily and weekly series across public interest, commodity,
+              exchange-rate, and other domains.
+            </p>
+          </article>
+        </div>
+        <figure class="wide-figure">
+          <img src="assets/domain_diversity.png" alt="Distribution visualization of TimesX numeric variables.">
+          <figcaption>TimesX covers diverse domains and variable types for cross-domain evaluation.</figcaption>
+        </figure>
+      </section>
+
+      <section id="pipeline" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Construction Pipeline</p>
+          <h2>Hypothesize, verify, enrich, and synthesize event context</h2>
+        </div>
+        <p class="lead">
+          The textual event pipeline uses constrained LLM agents and time-bounded retrieval to
+          discover candidate events, verify sources and timestamps, enrich missing details, and
+          synthesize grounded event narratives.
+        </p>
+        <figure class="wide-figure">
+          <img src="assets/agent_workflow.png" alt="TimesX multi-agent workflow for event construction.">
+          <figcaption>Automated event construction with explicit verification and timestamp controls.</figcaption>
+        </figure>
+      </section>
+
+      <section id="results" class="section band">
+        <div class="section-heading">
+          <p class="eyebrow">Findings</p>
+          <h2>TimesX reveals gaps hidden by earlier benchmarks</h2>
+        </div>
+        <div class="result-grid">
+          <figure class="result">
+            <img src="assets/synthetic_vs_real_mase.png" alt="Synthetic versus real-world benchmark performance comparison.">
+            <figcaption>Model rankings can differ sharply between synthetic context tasks and TimesX.</figcaption>
+          </figure>
+          <figure class="result">
+            <img src="assets/context_ablation.png" alt="Context-type ablation across language models.">
+            <figcaption>Calendar, covariates, and events can compound when used together.</figcaption>
+          </figure>
+          <figure class="result">
+            <img src="assets/gm_scale_band.png" alt="Benchmark size stability analysis.">
+            <figcaption>Larger benchmark scale improves the stability of model comparisons.</figcaption>
+          </figure>
+          <figure class="result">
+            <img src="assets/gas_price.png" alt="Example gas price time series from TimesX.">
+            <figcaption>TimesX pairs numeric series with temporally aligned textual context.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="citation" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Citation</p>
+          <h2>BibTeX</h2>
+        </div>
+        <pre class="bibtex"><code>@inproceedings{liu2026timesx,
+  title     = {Rethinking Multimodal Time-Series Forecasting Evaluation},
+  author    = {Liu, Haoxin and Zhou, Yichen and Sen, Rajat and
+               Prakash, B. Aditya and Das, Abhimanyu},
+  booktitle = {Proceedings of the 43rd International Conference on Machine Learning},
+  year      = {2026}
+}</code></pre>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>TimesX Project Page</p>
+      <p>For questions, please contact <a href="mailto:hliu763@gatech.edu">hliu763@gatech.edu</a>.</p>
+    </footer>
+  </body>
+</html>
