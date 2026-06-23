@@ -18,7 +18,8 @@
           <a href="#overview">Overview</a>
           <a href="#benchmark">Benchmark</a>
           <a href="#pipeline">Pipeline</a>
-          <a href="#results">Results</a>
+          <a href="#data-sample">Example</a>
+          <a href="#results">Findings</a>
           <a href="#citation">Citation</a>
         </div>
       </nav>
@@ -88,6 +89,15 @@
             <span>refreshable time span</span>
           </article>
         </div>
+
+        <figure class="wide-figure table-figure">
+          <img src="assets/table1_benchmarks.png" alt="Comparison of multimodal time-series forecasting benchmarks.">
+          <figcaption>
+            <strong>Table 1.</strong> Comparison of representative multimodal TSF benchmarks. TimesX is the only
+            benchmark that is simultaneously real-world, leakage-free, covers all four context types, and reaches
+            benchmark scale with 190 variables.
+          </figcaption>
+        </figure>
       </section>
 
       <section id="benchmark" class="section band">
@@ -95,84 +105,154 @@
           <p class="eyebrow">Benchmark Design</p>
           <h2>Real data, strict time isolation, and detailed context</h2>
         </div>
-        <div class="feature-grid">
-          <article class="feature">
-            <h3>Real-world observations</h3>
-            <p>
-              TimesX is constructed from real time series and real textual information rather
-              than synthetic time series or synthetic contexts.
-            </p>
-          </article>
-          <article class="feature">
-            <h3>Leakage-aware evaluation</h3>
-            <p>
-              Evaluation examples are selected with strict temporal isolation and can be
-              refreshed as model knowledge cutoffs move forward.
-            </p>
-          </article>
-          <article class="feature">
-            <h3>Context-rich forecasting</h3>
-            <p>
-              Each variable is paired with metadata, calendar information, covariate summaries,
-              and time-stamped event narratives.
-            </p>
-          </article>
-          <article class="feature">
-            <h3>Cross-domain scale</h3>
-            <p>
-              The benchmark covers daily and weekly series across public interest, commodity,
-              exchange-rate, and other domains.
-            </p>
-          </article>
+        <p class="lead">
+          Three principles separate TimesX from prior benchmarks. Each is backed by a controlled
+          experiment showing where existing evaluations can be misleading.
+        </p>
+
+        <div class="figure-stack">
+          <figure class="panel">
+            <img src="assets/fig_synthetic_vs_real.png" alt="Synthetic versus real-world performance under the same setup.">
+            <figcaption>
+              <strong>Real data.</strong> Under the same setup, the method ordering on synthetic CiK
+              (CodeRev &gt; Gemini &gt; TimesFM) completely flips on real-world TimesX. Synthetic generation can
+              bias rankings toward instruction-following LLMs and coding.
+            </figcaption>
+          </figure>
+          <div class="split-73">
+            <figure class="panel">
+              <img src="assets/table2_leakage.png" alt="Performance before and after the LLM knowledge cutoff.">
+              <figcaption>
+                <strong>Strict time isolation.</strong> Across the June-2024 knowledge cutoff, both LLMs degrade
+                by ~13%, while leakage-free TFMs stay within 2% — direct evidence of the contamination that
+                TimesX's time isolation is designed to prevent.
+              </figcaption>
+            </figure>
+            <figure class="panel">
+              <img src="assets/table3_context_quality.png" alt="Controlled replacement of textual context on Time-MMD.">
+              <figcaption>
+                <strong>Detailed context.</strong> Replacing Time-MMD's original context with TimesX-quality
+                context lowers geometric-mean MASE from 0.906 to 0.840 (7.3% relative).
+              </figcaption>
+            </figure>
+          </div>
         </div>
-        <figure class="wide-figure">
-          <img src="assets/domain_diversity.png" alt="Distribution visualization of TimesX numeric variables.">
-          <figcaption>TimesX covers diverse domains and variable types for cross-domain evaluation.</figcaption>
-        </figure>
       </section>
 
       <section id="pipeline" class="section">
         <div class="section-heading">
           <p class="eyebrow">Construction Pipeline</p>
-          <h2>Hypothesize, verify, enrich, and synthesize event context</h2>
+          <h2>An automatic dataset agent driven by multi-agent collaboration and debate</h2>
         </div>
         <p class="lead">
           The textual event pipeline uses constrained LLM agents and time-bounded retrieval to
           discover candidate events, verify sources and timestamps, enrich missing details, and
           synthesize grounded event narratives.
         </p>
-        <figure class="wide-figure">
-          <img src="assets/agent_workflow.png" alt="TimesX multi-agent workflow for event construction.">
-          <figcaption>Automated event construction with explicit verification and timestamp controls.</figcaption>
+
+        <ul class="insight-list">
+          <li>
+            <strong>Deep research enriches the details.</strong> An Enricher agent runs iterative,
+            time-bounded web searches and merges multiple sources to fill in missing event information.
+          </li>
+          <li>
+            <strong>Multi-agent debate and collaboration mitigate hallucination.</strong> A Hypothesizer
+            and a Verifier act adversarially to filter out fabricated or leaked content, then collaborate
+            with the Enricher to raise event quality.
+          </li>
+          <li>
+            <strong>Time-bounded search and LLM date correction prevent leakage.</strong> Programmatic
+            date-range constraints on Google search, combined with LLM timestamp correction, keep every
+            annotated event strictly before its forecast window.
+          </li>
+        </ul>
+
+        <figure class="diagram-figure">
+          <img src="assets/pipeline_workflow.png" alt="The four-role multi-agent dataset agent workflow.">
+          <figcaption>
+            <strong>Figure 2.</strong> The four-role dataset agent — Hypothesizer, Verifier, Enricher, and
+            Synthesizer — for automatic, leakage-free event construction.
+          </figcaption>
         </figure>
       </section>
 
-      <section id="results" class="section band">
+      <section id="data-sample" class="section band">
         <div class="section-heading">
-          <p class="eyebrow">Findings</p>
-          <h2>TimesX reveals gaps hidden by earlier benchmarks</h2>
+          <p class="eyebrow">Data Sample</p>
+          <h2>One variable, paired with its four context types</h2>
         </div>
-        <div class="result-grid">
-          <figure class="result">
-            <img src="assets/synthetic_vs_real_mase.png" alt="Synthetic versus real-world benchmark performance comparison.">
-            <figcaption>Model rankings can differ sharply between synthetic context tasks and TimesX.</figcaption>
+        <div class="data-sample">
+          <figure class="panel">
+            <img src="assets/data_gas_price.png" alt="GAS_PRICE time-series example from TimesX.">
+            <figcaption>
+              <strong>Time series.</strong> A <code>GAS_PRICE</code> example from TimesX: daily gasoline price
+              (USD/Gal), with the forecast horizon window highlighted and the event announcement/effect dates marked.
+            </figcaption>
           </figure>
-          <figure class="result">
-            <img src="assets/context_ablation.png" alt="Context-type ablation across language models.">
-            <figcaption>Calendar, covariates, and events can compound when used together.</figcaption>
-          </figure>
-          <figure class="result">
-            <img src="assets/gm_scale_band.png" alt="Benchmark size stability analysis.">
-            <figcaption>Larger benchmark scale improves the stability of model comparisons.</figcaption>
-          </figure>
-          <figure class="result">
-            <img src="assets/gas_price.png" alt="Example gas price time series from TimesX.">
-            <figcaption>TimesX pairs numeric series with temporally aligned textual context.</figcaption>
-          </figure>
+          <div class="context-blocks">
+            <p class="context-block">
+              <span class="tag">Metadata</span>Gasoline price (USD/Gal) in the Commodity Price domain, at daily
+              frequency. Prediction target period: 2024-09-01 to 2024-09-15.
+            </p>
+            <p class="context-block">
+              <span class="tag">Date</span>Historical data as (timestamp, value): (2024-06-02, 2.4116),
+              (2024-06-03, 2.3279), … Upcoming holidays in the prediction window: Labor Day (2024-09-02).
+            </p>
+            <p class="context-block">
+              <span class="tag">Covariates</span>From 2024-06-01 to 2024-08-31: (1) Brent Crude Oil (USD/BBL):
+              maximum 87.43 on July 4, …, with an overall downward trend; (2) …
+            </p>
+            <p class="context-block">
+              <span class="tag">Events</span>(1) On June 2, 2024, OPEC+ agreed to extend deep oil output cuts;
+              the 2.2 million bpd cut would be extended until September 2024, then gradually phased out.
+              Sources: [1] [2] [3]; (2) …
+            </p>
+          </div>
         </div>
       </section>
 
-      <section id="citation" class="section">
+      <section id="results" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Empirical Findings</p>
+          <h2>What 312k+ multimodal forecasts reveal</h2>
+        </div>
+
+        <ol class="insight-list numbered">
+          <li>Simple ensemble methods are currently the most effective composition.</li>
+          <li>Training-free agentic solutions are often unstable.</li>
+          <li>Providing in-context samples is a promising direction.</li>
+          <li>We look forward to future fine-tuning work that addresses the problem more thoroughly.</li>
+        </ol>
+
+        <div class="figure-stack">
+          <figure class="panel">
+            <img src="assets/table4_main_results.png" alt="Overall benchmark results of the 13 selected methods.">
+            <figcaption>
+              <strong>Table 4.</strong> Overall benchmark results (mean over 10 runs) of the 13 methods. The
+              simple average ensemble <em>AvgEns: TimesFM-2.5 + Gemini-2.0-Flash</em> ranks first on both MASE
+              and rank, ahead of every agentic revision method.
+            </figcaption>
+          </figure>
+          <div class="split-73">
+            <figure class="panel">
+              <img src="assets/fig_boxplot.png" alt="Boxplot of per-instance method performance.">
+              <figcaption>
+                <strong>Figure 5.</strong> Per-instance error spread. Agentic revision methods (CodeRev / FuncRev)
+                show a wider spread and more severe outliers, which explains their unstable geometric means.
+              </figcaption>
+            </figure>
+            <figure class="panel">
+              <img src="assets/table7_icl.png" alt="In-context learning probe results.">
+              <figcaption>
+                <strong>Table 7.</strong> An in-context-learning probe: a single retrieved demonstration makes
+                TextRev surpass strong zero-shot baselines, suggesting that training-based methods can help.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="citation" class="section band">
         <div class="section-heading">
           <p class="eyebrow">Citation</p>
           <h2>BibTeX</h2>

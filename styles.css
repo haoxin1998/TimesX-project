@@ -293,6 +293,160 @@ figcaption {
   background: #fff;
 }
 
+.table-figure img {
+  background: #fff;
+}
+
+/* Stacked figure rows + 0.7 : 0.3 split */
+.figure-stack {
+  display: grid;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.split-73 {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.panel {
+  margin: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.panel img {
+  width: 100%;
+  margin: auto 0;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.panel figcaption {
+  margin-top: 14px;
+}
+
+/* Insight lists (bullet + numbered variants) */
+.insight-list {
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+
+.insight-list li {
+  position: relative;
+  padding-left: 34px;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.insight-list:not(.numbered) li::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 0.6em;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: rotate(45deg);
+}
+
+.insight-list.numbered {
+  counter-reset: ins;
+}
+
+.insight-list.numbered li::before {
+  counter-increment: ins;
+  content: counter(ins);
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Data sample: image left, context blocks right */
+.data-sample {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 24px;
+  margin-top: 32px;
+  align-items: start;
+}
+
+.context-blocks {
+  display: grid;
+  gap: 14px;
+}
+
+.context-block {
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.context-block .tag {
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--accent);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.context-block code,
+.data-sample code {
+  font-size: 0.92em;
+  background: var(--band);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* Pipeline diagram, scaled down (~0.6x) and centered */
+.diagram-figure {
+  width: min(100%, 620px);
+  margin: 32px auto 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.diagram-figure img {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.diagram-figure figcaption {
+  margin-top: 14px;
+  text-align: center;
+}
+
 .bibtex {
   margin: 28px 0 0;
   padding: 22px;
@@ -337,6 +491,11 @@ figcaption {
   .feature-grid,
   .result-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .split-73,
+  .data-sample {
+    grid-template-columns: 1fr;
   }
 }
 
