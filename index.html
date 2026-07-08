@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TimesX: Rethinking Multimodal Time-Series Forecasting Evaluation</title>
+    <meta
+      name="description"
+      content="TimesX is a real-world, leakage-aware, context-enriched benchmark for multimodal time-series forecasting evaluation."
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="brand" href="#">TimesX</a>
+        <div class="nav-links">
+          <a href="#overview">Overview</a>
+          <a href="#benchmark">Benchmark</a>
+          <a href="#pipeline">Pipeline</a>
+          <a href="#data-sample">Example</a>
+          <a href="#results">Findings</a>
+          <a href="#citation">Citation</a>
+        </div>
+      </nav>
+
+      <section class="hero">
+        <p class="venue">ICML 2026</p>
+        <h1>Rethinking Multimodal Time-Series Forecasting Evaluation</h1>
+        <p class="subtitle">
+          TimesX is a real-world, leakage-aware, and refreshable benchmark for evaluating
+          multimodal time-series forecasting methods with rich textual context.
+        </p>
+
+        <div class="authors" aria-label="Authors and affiliations">
+          <p>
+            <strong>Haoxin Liu</strong><sup>1,2</sup>
+            <strong>Yichen Zhou</strong><sup>2</sup>
+            <strong>Rajat Sen</strong><sup>2</sup>
+            <strong>B. Aditya Prakash</strong><sup>1</sup>
+            <strong>Abhimanyu Das</strong><sup>2</sup>
+          </p>
+          <p><sup>1</sup>Georgia Institute of Technology &nbsp; <sup>2</sup>Google Research</p>
+        </div>
+
+        <div class="actions" aria-label="Project resources">
+          <a class="button primary" href="assets/TimesX_ICML_FinalCameraReady.pdf">Paper</a>
+          <a class="button" href="https://github.com/google-research/google-research/tree/master/TimesX/dataset_agent">Code</a>
+          <a class="button" href="https://github.com/haoxin1998/TimesX-project/tree/main/Datasets">Dataset updated to 2026.03</a>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section id="overview" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Overview</p>
+          <h2>A benchmark built for realistic multimodal forecasting</h2>
+        </div>
+        <p class="lead">
+          TimesX studies how pretrained time-series foundation models and language models
+          behave when forecasts require both historical numeric signals and natural-language
+          context such as metadata, calendar effects, covariates, and time-stamped events.
+        </p>
+
+        <div class="metric-grid">
+          <article class="metric">
+            <strong>190</strong>
+            <span>core variables</span>
+          </article>
+          <article class="metric">
+            <strong>19</strong>
+            <span>domains</span>
+          </article>
+          <article class="metric">
+            <strong>4</strong>
+            <span>context types</span>
+          </article>
+          <article class="metric">
+            <strong>13</strong>
+            <span>evaluated methods</span>
+          </article>
+          <article class="metric">
+            <strong>312k+</strong>
+            <span>LLM inferences</span>
+          </article>
+          <article class="metric">
+            <strong>2018-2025</strong>
+            <span>refreshable time span</span>
+          </article>
+        </div>
+
+        <figure class="wide-figure table-figure">
+          <img src="assets/table1_benchmarks.png" alt="Comparison of multimodal time-series forecasting benchmarks.">
+          <figcaption>
+            <strong>Table 1.</strong> Comparison of representative multimodal TSF benchmarks. TimesX is the only
+            benchmark that is simultaneously real-world, leakage-free, covers all four context types, and reaches
+            benchmark scale with 190 variables.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section id="benchmark" class="section band">
+        <div class="section-heading">
+          <p class="eyebrow">Design Principles: Real, Refreshable, Comprehensive and High-Quality</p>
+          <h2>Real-World Data, Refreshable (Continuously Mitigating Leakage), and Comprehensive High-Quality Context</h2>
+        </div>
+        <p class="lead">
+          Three principles separate TimesX from prior benchmarks. Each is backed by a controlled
+          experiment showing where existing evaluations can be misleading.
+        </p>
+
+        <div class="figure-stack">
+          <figure class="panel">
+            <img src="assets/fig_synthetic_vs_real.png" alt="Synthetic versus real-world performance under the same setup.">
+            <figcaption>
+              <strong>Real data.</strong> Under the same setup, the method ordering on synthetic CiK
+              (CodeRev &gt; Gemini &gt; TimesFM) completely flips on real-world TimesX. Synthetic generation can
+              bias rankings toward instruction-following LLMs and coding.
+            </figcaption>
+          </figure>
+          <div class="split-73">
+            <figure class="panel">
+              <img src="assets/table2_leakage.png" alt="Performance before and after the LLM knowledge cutoff.">
+              <figcaption>
+                <strong>Strict time isolation.</strong> Across the June-2024 knowledge cutoff, both LLMs degrade
+                by ~13%, while leakage-free TFMs stay within 2% — direct evidence of the contamination that
+                TimesX's time isolation is designed to prevent.
+              </figcaption>
+            </figure>
+            <figure class="panel">
+              <img src="assets/table3_context_quality.png" alt="Controlled replacement of textual context on Time-MMD.">
+              <figcaption>
+                <strong>Detailed context.</strong> Replacing Time-MMD's original context with TimesX-quality
+                context lowers geometric-mean MASE from 0.906 to 0.840 (7.3% relative).
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="pipeline" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Construction Pipeline</p>
+          <h2>An automatic dataset agent driven by multi-agent collaboration and adversarial verification</h2>
+        </div>
+        <p class="lead">
+          The textual event pipeline uses constrained LLM agents and time-bounded retrieval to
+          discover candidate events, verify sources and timestamps, enrich missing details, and
+          synthesize grounded event narratives.
+        </p>
+
+        <ul class="insight-list">
+          <li>
+            <strong>Deep research enriches the details.</strong> An Enricher agent runs iterative,
+            time-bounded web searches and merges multiple sources to fill in missing event information.
+          </li>
+          <li>
+            <strong>Adversarial verification and collaboration mitigate hallucination.</strong> A Hypothesizer
+            and a Verifier act adversarially to filter out fabricated or leaked content, then collaborate
+            with the Enricher to raise event quality.
+          </li>
+          <li>
+            <strong>Time-bounded search and LLM date correction prevent leakage.</strong> Programmatic
+            date-range constraints on Google search, combined with LLM timestamp correction, keep every
+            annotated event strictly before its forecast window.
+          </li>
+        </ul>
+
+        <figure class="diagram-figure">
+          <img src="assets/pipeline_workflow.png" alt="The four-role multi-agent dataset agent workflow.">
+          <figcaption>
+            <strong>Figure 2.</strong> The four-role dataset agent — Hypothesizer, Verifier, Enricher, and
+            Synthesizer — for automatic, leakage-free event construction.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section id="data-sample" class="section band">
+        <div class="section-heading">
+          <p class="eyebrow">Data Sample</p>
+          <h2>One variable, paired with its four context types</h2>
+        </div>
+        <div class="data-sample">
+          <figure class="panel">
+            <img src="assets/data_gas_price.png" alt="GAS_PRICE time-series example from TimesX.">
+            <figcaption>
+              <strong>Time series.</strong> A <code>GAS_PRICE</code> example from TimesX: daily gasoline price
+              (USD/Gal), with the forecast horizon window highlighted and the event announcement/effect dates marked.
+            </figcaption>
+          </figure>
+          <div class="context-blocks">
+            <p class="context-block">
+              <span class="tag">Metadata</span>Gasoline price (USD/Gal) in the Commodity Price domain, at daily
+              frequency. Prediction target period: 2024-09-01 to 2024-09-15.
+            </p>
+            <p class="context-block">
+              <span class="tag">Date</span>Historical data as (timestamp, value): (2024-06-02, 2.4116),
+              (2024-06-03, 2.3279), … Upcoming holidays in the prediction window: Labor Day (2024-09-02).
+            </p>
+            <p class="context-block">
+              <span class="tag">Covariates</span>From 2024-06-01 to 2024-08-31: (1) Brent Crude Oil (USD/BBL):
+              maximum 87.43 on July 4, …, with an overall downward trend; (2) …
+            </p>
+            <p class="context-block">
+              <span class="tag">Events</span>(1) On June 2, 2024, OPEC+ agreed to extend deep oil output cuts;
+              the 2.2 million bpd cut would be extended until September 2024, then gradually phased out.
+              Sources: [1] [2] [3]; (2) …
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="results" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Empirical Findings</p>
+          <h2>What our experiments on TimesX reveal</h2>
+        </div>
+
+        <ol class="insight-list numbered">
+          <li>Simple ensemble methods are currently the most effective composition.</li>
+          <li>Training-free agentic solutions are often unstable.</li>
+          <li>Providing in-context samples is a promising direction.</li>
+          <li>We look forward to future fine-tuning work that addresses the problem more thoroughly.</li>
+        </ol>
+
+        <div class="figure-stack">
+          <figure class="panel">
+            <img src="assets/table4_main_results.png" alt="Overall benchmark results of the 13 selected methods.">
+            <figcaption>
+              <strong>Table 4.</strong> Overall benchmark results (mean over 10 runs) of the 13 methods. The
+              simple average ensemble <em>AvgEns: TimesFM-2.5 + Gemini-2.0-Flash</em> ranks first on both MASE
+              and rank, ahead of every agentic revision method.
+            </figcaption>
+          </figure>
+          <div class="split-73">
+            <figure class="panel">
+              <img src="assets/fig_boxplot.png" alt="Boxplot of per-instance method performance.">
+              <figcaption>
+                <strong>Figure 5.</strong> Per-instance error spread. Agentic revision methods (CodeRev / FuncRev)
+                show a wider spread and more severe outliers, which explains their unstable geometric means.
+              </figcaption>
+            </figure>
+            <figure class="panel">
+              <img src="assets/table7_icl.png" alt="In-context learning probe results.">
+              <figcaption>
+                <strong>Table 7.</strong> An in-context-learning probe: a single retrieved demonstration makes
+                TextRev surpass strong zero-shot baselines, suggesting that training-based methods can help.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="citation" class="section band">
+        <div class="section-heading">
+          <p class="eyebrow">Citation</p>
+          <h2>BibTeX</h2>
+        </div>
+        <pre class="bibtex"><code>@inproceedings{liu2026timesx,
+  title     = {Rethinking Multimodal Time-Series Forecasting Evaluation},
+  author    = {Liu, Haoxin and Zhou, Yichen and Sen, Rajat and
+               Prakash, B. Aditya and Das, Abhimanyu},
+  booktitle = {Proceedings of the 43rd International Conference on Machine Learning},
+  year      = {2026}
+}</code></pre>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>TimesX Project Page</p>
+      <p>For questions, please contact <a href="mailto:hliu763@gatech.edu">hliu763@gatech.edu</a>.</p>
+    </footer>
+  </body>
+</html>
